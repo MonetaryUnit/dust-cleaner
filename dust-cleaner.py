@@ -5,13 +5,13 @@
 # groups small 'dust' transactions with zero or minimal fee
 #
 
-COIN_NAME = "myriadcoin"
-COIN_CODE = "MYR"
-COIN_RPC_PORT = "10889"
-FREE_BLOCK_SIZE = 1000
-FREE_PRIORITY_THRESHOLD = 0.576
-FEE_PER_BLOCK = 0.0001
-MAX_STANDARD_TX_SIZE = 100000
+COIN_NAME = "monetaryunit"
+COIN_CODE = "MUE"
+COIN_RPC_PORT = "29947"
+FREE_BLOCK_SIZE = 29000
+FREE_PRIORITY_THRESHOLD = 10.81
+FEE_PER_BLOCK = 0.1 #intentionally set high, pending investigation
+MAX_STANDARD_TX_SIZE = 350000
 
 from operator import itemgetter
 import argparse
@@ -68,7 +68,7 @@ def get_cheap_tx(ctx, ignore_list, max_fee = 0):
     while work_ctx:
       tx = work_ctx.pop()
 
-      next_tx_size_bytes = tx_size_bytes + 180
+      next_tx_size_bytes = tx_size_bytes + 150
       next_tx_amount     = tx_amount + tx["amount"]
       next_weight        = tx_weight + tx["priority"]
 
@@ -99,7 +99,7 @@ def create_json_tx(tx_list, pay_to, tx_amount, fee):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description = "Joins 'dust' received payments into a manageable new bigger payment to the given address, with minimal transaction fee.")
-    parser.add_argument("address", help = "The MYR address to send the aggregated payments.")
+    parser.add_argument("address", help = "The MUE address to send the aggregated payments.")
     parser.add_argument("-f", "--max_fee", help = "The maximum transaction fee allowed. Creates transaction with no fees if omitted.", type = float)
     parser.add_argument("-i", "--ignore", help = "Address not to be included in the new transaction. \"address\" is always ignored. Can be called multiple times for more than one address.", action = "append")
     parser.add_argument("-o", "--rpc_url", help = "The wallet RPC URL. Default: localhost:" + COIN_RPC_PORT + ".")
